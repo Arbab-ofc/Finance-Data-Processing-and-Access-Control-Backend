@@ -159,6 +159,7 @@ MONGODB_URI=
 JWT_SECRET=
 JWT_EXPIRES_IN=1d
 CLIENT_URL=http://localhost:3000
+AUTH_COOKIE_NAME=token
 ```
 
 ## Installation
