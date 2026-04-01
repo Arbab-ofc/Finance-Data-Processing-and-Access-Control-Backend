@@ -13,7 +13,11 @@ const app = express();
 
 app.use(helmet());
 app.use(cors({ origin: env.clientUrl === '*' ? true : env.clientUrl, credentials: true }));
-app.use(morgan(env.nodeEnv === 'production' ? 'combined' : 'dev'));
+app.use(
+  morgan(env.nodeEnv === 'production' ? 'combined' : 'dev', {
+    skip: () => env.nodeEnv === 'test',
+  }),
+);
 app.use(requestId);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
