@@ -2,14 +2,15 @@ import { User } from '../models/User.js';
 import { verifyToken } from '../utils/jwt.js';
 import { ApiError } from '../utils/apiError.js';
 import { USER_STATUS } from '../constants/status.js';
+import { env } from '../config/env.js';
 
 const extractToken = (req) => {
   if (req.headers.authorization?.startsWith('Bearer ')) {
     return req.headers.authorization.split(' ')[1];
   }
 
-  if (req.cookies?.token) {
-    return req.cookies.token;
+  if (req.cookies?.[env.authCookieName]) {
+    return req.cookies[env.authCookieName];
   }
 
   return null;
