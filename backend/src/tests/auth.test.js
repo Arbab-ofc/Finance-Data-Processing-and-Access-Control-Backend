@@ -77,6 +77,7 @@ describe('Auth Endpoints', () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body.message).toBe('Logout successful');
+    expect(response.headers['set-cookie']).toBeDefined();
   });
 
   test('login validation failure', async () => {
@@ -85,5 +86,33 @@ describe('Auth Endpoints', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body.success).toBe(false);
     expect(response.body.errors.length).toBeGreaterThanOrEqual(1);
+  });
+
+  test('login sets auth cookie', async () => {
+    const { admin } = await createUsersByRole();
+
+    const response = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: admin.email, password: 'Password@123' });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['set-cookie']).toBeDefined();
+    expect(response.headers['set-cookie'][0]).toContain('token=');
+  });
+
+  test('protected routes accept cookie-based token', async () => {
+    const { admin } = await createUsersByRole();
+
+    const login = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: admin.email, password: 'Password@123' });
+
+    const cookie = login.headers['set-cookie'][0];
+    const response = await request(app)
+      .get('/api/v1/auth/me')
+      .set('Cookie', cookie);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.data.email).toBe(admin.email);
   });
 });
