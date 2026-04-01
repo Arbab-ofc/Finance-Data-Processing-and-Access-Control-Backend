@@ -41,8 +41,6 @@ const userSchema = new mongoose.Schema(
   },
 );
 
-userSchema.index({ email: 1 }, { unique: true });
-
 userSchema.pre('save', async function hashPassword() {
   if (!this.isModified('password')) {
     return;
