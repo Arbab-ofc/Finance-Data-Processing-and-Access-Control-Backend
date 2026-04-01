@@ -2,6 +2,7 @@ import { body, query } from 'express-validator';
 
 import { USER_ROLE_VALUES } from '../constants/roles.js';
 import { USER_STATUS_VALUES } from '../constants/status.js';
+import { USER_SORT_FIELDS } from '../constants/sortFields.js';
 
 export const createUserValidation = [
   body('name').trim().notEmpty().withMessage('Name is required'),
@@ -33,6 +34,6 @@ export const listUsersValidation = [
   query('limit').optional().isInt({ min: 1, max: 100 }).withMessage('limit must be between 1 and 100'),
   query('role').optional().isIn(USER_ROLE_VALUES).withMessage(`role must be one of: ${USER_ROLE_VALUES.join(', ')}`),
   query('status').optional().isIn(USER_STATUS_VALUES).withMessage(`status must be one of: ${USER_STATUS_VALUES.join(', ')}`),
-  query('sortBy').optional().isIn(['name', 'email', 'role', 'status', 'createdAt']).withMessage('sortBy is invalid'),
+  query('sortBy').optional().isIn(USER_SORT_FIELDS).withMessage('sortBy is invalid'),
   query('order').optional().isIn(['asc', 'desc']).withMessage('order must be asc or desc'),
 ];

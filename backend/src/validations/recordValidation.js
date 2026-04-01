@@ -1,6 +1,7 @@
 import { body, query } from 'express-validator';
 
 import { RECORD_TYPE_VALUES, RECORD_CATEGORIES } from '../constants/finance.js';
+import { RECORD_SORT_FIELDS } from '../constants/sortFields.js';
 
 export const createRecordValidation = [
   body('amount').isFloat({ gt: 0 }).withMessage('amount must be a positive number'),
@@ -27,7 +28,7 @@ export const listRecordValidation = [
   query('endDate').optional().isISO8601().withMessage('endDate must be a valid date'),
   query('minAmount').optional().isFloat({ gt: 0 }).withMessage('minAmount must be a positive number'),
   query('maxAmount').optional().isFloat({ gt: 0 }).withMessage('maxAmount must be a positive number'),
-  query('sortBy').optional().isIn(['amount', 'date', 'category', 'type', 'createdAt']).withMessage('sortBy is invalid'),
+  query('sortBy').optional().isIn(RECORD_SORT_FIELDS).withMessage('sortBy is invalid'),
   query('order').optional().isIn(['asc', 'desc']).withMessage('order must be asc or desc'),
   query('endDate')
     .optional()
