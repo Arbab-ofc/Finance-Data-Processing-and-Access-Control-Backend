@@ -36,7 +36,7 @@ export const updateRoleController = asyncHandler(async (req, res) => {
 });
 
 export const updateStatusController = asyncHandler(async (req, res) => {
-  const user = await updateUserStatus(req.params.id, req.body.status);
+  const user = await updateUserStatus(req.params.id, req.body.status, req.user.id);
   return sendSuccess(res, 'User status updated successfully', user);
 });
 

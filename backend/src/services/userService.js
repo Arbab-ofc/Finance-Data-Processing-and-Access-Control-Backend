@@ -87,7 +87,11 @@ export const updateUserRole = async (userId, role) => {
   return user.toSafeObject();
 };
 
-export const updateUserStatus = async (userId, status) => {
+export const updateUserStatus = async (userId, status, actorId) => {
+  if (actorId && actorId === userId && status === 'inactive') {
+    throw new ApiError(400, 'Admin cannot deactivate own account');
+  }
+
   const user = await User.findByIdAndUpdate(userId, { status }, { returnDocument: 'after', runValidators: true });
 
   if (!user) {
