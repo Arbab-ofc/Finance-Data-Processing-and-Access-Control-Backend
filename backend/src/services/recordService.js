@@ -1,6 +1,7 @@
 import { FinancialRecord } from '../models/FinancialRecord.js';
 import { ApiError } from '../utils/apiError.js';
 import { buildPagination } from '../utils/pagination.js';
+import { normalizePaginationQuery } from '../utils/query.js';
 
 const buildRecordFilters = (query) => {
   const filter = {};
@@ -51,9 +52,7 @@ export const createRecord = async (payload, actorId) => {
 };
 
 export const listRecords = async (query) => {
-  const page = Number(query.page) || 1;
-  const limit = Number(query.limit) || 10;
-  const skip = (page - 1) * limit;
+  const { page, limit, skip } = normalizePaginationQuery(query);
 
   const filter = buildRecordFilters(query);
   const sortBy = query.sortBy || 'date';

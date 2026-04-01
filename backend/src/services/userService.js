@@ -2,6 +2,7 @@ import { User } from '../models/User.js';
 import { ApiError } from '../utils/apiError.js';
 import { hashPassword } from '../utils/password.js';
 import { buildPagination } from '../utils/pagination.js';
+import { normalizePaginationQuery } from '../utils/query.js';
 
 export const createUser = async (payload) => {
   const existing = await User.findOne({ email: payload.email.toLowerCase() });
@@ -19,9 +20,7 @@ export const createUser = async (payload) => {
 };
 
 export const listUsers = async (query) => {
-  const page = Number(query.page) || 1;
-  const limit = Number(query.limit) || 10;
-  const skip = (page - 1) * limit;
+  const { page, limit, skip } = normalizePaginationQuery(query);
 
   const filter = {};
 
