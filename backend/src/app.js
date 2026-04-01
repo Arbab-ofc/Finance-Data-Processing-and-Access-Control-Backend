@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import { env } from './config/env.js';
 import { notFoundHandler, errorHandler } from './middlewares/errorHandler.js';
 import { requestId } from './middlewares/requestIdMiddleware.js';
+import { apiRateLimiter } from './middlewares/rateLimitMiddleware.js';
 import { apiRouter } from './routes/index.js';
 
 const app = express();
@@ -27,7 +28,7 @@ app.get('/health', (req, res) => {
   res.status(200).json({ success: true, message: 'Server is healthy' });
 });
 
-app.use('/api/v1', apiRouter);
+app.use('/api/v1', apiRateLimiter, apiRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
