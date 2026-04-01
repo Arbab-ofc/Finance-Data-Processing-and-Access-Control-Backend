@@ -32,4 +32,20 @@ describe('App Baseline Endpoints', () => {
     expect(response.statusCode).toBe(401);
     expect(response.body.success).toBe(false);
   });
+
+  test('request id is generated when missing', async () => {
+    const response = await request(app).get('/health');
+
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['x-request-id']).toBeDefined();
+  });
+
+  test('request id is propagated when provided', async () => {
+    const response = await request(app)
+      .get('/health')
+      .set('x-request-id', 'custom-id-123');
+
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['x-request-id']).toBe('custom-id-123');
+  });
 });
