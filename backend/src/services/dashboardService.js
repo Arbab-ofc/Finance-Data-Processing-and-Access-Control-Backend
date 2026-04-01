@@ -56,36 +56,57 @@ export const getCategoryBreakdown = async () => FinancialRecord.aggregate([
   },
 ]);
 
-export const getMonthlyTrends = async () => FinancialRecord.aggregate([
-  {
-    $group: {
-      _id: {
-        year: { $year: '$date' },
-        month: { $month: '$date' },
-        type: '$type',
+export const getMonthlyTrends = async ({ startDate, endDate } = {}) => {
+  const matchStage = {};
+
+  if (startDate || endDate) {
+    matchStage.date = {};
+    if (startDate) {
+      matchStage.date.$gte = new Date(startDate);
+    }
+    if (endDate) {
+      matchStage.date.$lte = new Date(endDate);
+    }
+  }
+
+  const pipeline = [];
+  if (Object.keys(matchStage).length) {
+    pipeline.push({ $match: matchStage });
+  }
+
+  pipeline.push(
+    {
+      $group: {
+        _id: {
+          year: { $year: '$date' },
+          month: { $month: '$date' },
+          type: '$type',
+        },
+        total: { $sum: '$amount' },
+        count: { $sum: 1 },
       },
-      total: { $sum: '$amount' },
-      count: { $sum: 1 },
     },
-  },
-  {
-    $project: {
-      _id: 0,
-      year: '$_id.year',
-      month: '$_id.month',
-      type: '$_id.type',
-      total: 1,
-      count: 1,
+    {
+      $project: {
+        _id: 0,
+        year: '$_id.year',
+        month: '$_id.month',
+        type: '$_id.type',
+        total: 1,
+        count: 1,
+      },
     },
-  },
-  {
-    $sort: {
-      year: 1,
-      month: 1,
-      type: 1,
+    {
+      $sort: {
+        year: 1,
+        month: 1,
+        type: 1,
+      },
     },
-  },
-]);
+  );
+
+  return FinancialRecord.aggregate(pipeline);
+};
 
 export const getRecentActivity = async (limit = 10) => FinancialRecord.find({})
   .sort({ createdAt: -1 })

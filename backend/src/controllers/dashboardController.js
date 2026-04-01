@@ -18,7 +18,7 @@ export const categoryBreakdownController = asyncHandler(async (req, res) => {
 });
 
 export const trendsController = asyncHandler(async (req, res) => {
-  const data = await getMonthlyTrends();
+  const data = await getMonthlyTrends(req.query);
   return sendSuccess(res, 'Trends fetched successfully', data);
 });
 
