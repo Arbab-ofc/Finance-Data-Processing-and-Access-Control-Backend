@@ -26,7 +26,7 @@ export const authenticate = async (req, res, next) => {
 
   try {
     const decoded = verifyToken(token);
-    const user = await User.findById(decoded.sub).select('+password');
+    const user = await User.findById(decoded.sub);
 
     if (!user) {
       return next(new ApiError(401, AUTH_MESSAGES.INVALID_TOKEN));
@@ -46,6 +46,10 @@ export const authenticate = async (req, res, next) => {
 
     return next();
   } catch (error) {
-    return next(new ApiError(401, AUTH_MESSAGES.INVALID_TOKEN));
+    if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError' || error.name === 'NotBeforeError') {
+      return next(new ApiError(401, AUTH_MESSAGES.INVALID_TOKEN));
+    }
+
+    return next(error);
   }
 };

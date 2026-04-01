@@ -7,7 +7,8 @@ import { AUTH_MESSAGES } from '../constants/messages.js';
 import { serializeUser } from '../utils/serializers.js';
 
 export const loginUser = async ({ email, password }) => {
-  const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
+  const normalizedEmail = typeof email === 'string' ? email.toLowerCase() : '';
+  const user = await User.findOne({ email: normalizedEmail }).select('+password');
 
   if (!user) {
     throw new ApiError(401, AUTH_MESSAGES.INVALID_CREDENTIALS);

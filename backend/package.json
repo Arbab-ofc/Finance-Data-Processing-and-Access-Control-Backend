@@ -8,6 +8,7 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --runInBand --detectOpenHandles",
+    "test:ci": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
     "test:watch": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "seed": "node src/seeds/seedData.js"
   },
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "jest": "^30.3.0",
+    "mongodb-memory-server": "^11.0.1",
     "nodemon": "^3.1.14",
     "supertest": "^7.2.2"
   },
