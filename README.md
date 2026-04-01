@@ -173,11 +173,6 @@ flowchart TD
 
 ## Endpoint Results
 
-<details>
-<summary><strong>Expand Full Endpoint Results (All Sample Responses)</strong></summary>
-
-<br/>
-
 ### System
 
 `GET /health`
@@ -631,8 +626,6 @@ flowchart TD
   ]
 }
 ```
-
-</details>
 
 ---
 
