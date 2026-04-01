@@ -68,7 +68,7 @@ export const updateUser = async (userId, payload) => {
     payload.email = payload.email.toLowerCase();
   }
 
-  const user = await User.findByIdAndUpdate(userId, payload, { new: true, runValidators: true });
+  const user = await User.findByIdAndUpdate(userId, payload, { returnDocument: 'after', runValidators: true });
 
   if (!user) {
     throw new ApiError(404, 'User not found');
@@ -78,7 +78,7 @@ export const updateUser = async (userId, payload) => {
 };
 
 export const updateUserRole = async (userId, role) => {
-  const user = await User.findByIdAndUpdate(userId, { role }, { new: true, runValidators: true });
+  const user = await User.findByIdAndUpdate(userId, { role }, { returnDocument: 'after', runValidators: true });
 
   if (!user) {
     throw new ApiError(404, 'User not found');
@@ -88,7 +88,7 @@ export const updateUserRole = async (userId, role) => {
 };
 
 export const updateUserStatus = async (userId, status) => {
-  const user = await User.findByIdAndUpdate(userId, { status }, { new: true, runValidators: true });
+  const user = await User.findByIdAndUpdate(userId, { status }, { returnDocument: 'after', runValidators: true });
 
   if (!user) {
     throw new ApiError(404, 'User not found');
@@ -99,7 +99,7 @@ export const updateUserStatus = async (userId, status) => {
 
 export const resetUserPassword = async (userId, password) => {
   const hashed = await hashPassword(password);
-  const user = await User.findByIdAndUpdate(userId, { password: hashed }, { new: true, runValidators: false }).select('+password');
+  const user = await User.findByIdAndUpdate(userId, { password: hashed }, { returnDocument: 'after', runValidators: false }).select('+password');
 
   if (!user) {
     throw new ApiError(404, 'User not found');

@@ -94,7 +94,7 @@ export const updateRecord = async (recordId, payload, actorId) => {
       ...payload,
       updatedBy: actorId,
     },
-    { new: true, runValidators: true },
+    { returnDocument: 'after', runValidators: true },
   )
     .populate('createdBy', 'name email role')
     .populate('updatedBy', 'name email role');
