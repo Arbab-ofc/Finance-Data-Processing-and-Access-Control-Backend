@@ -29,4 +29,31 @@ export const listRecordValidation = [
   query('maxAmount').optional().isFloat({ gt: 0 }).withMessage('maxAmount must be a positive number'),
   query('sortBy').optional().isIn(['amount', 'date', 'category', 'type', 'createdAt']).withMessage('sortBy is invalid'),
   query('order').optional().isIn(['asc', 'desc']).withMessage('order must be asc or desc'),
+  query('endDate')
+    .optional()
+    .custom((endDate, { req }) => {
+      if (!req.query.startDate || !endDate) {
+        return true;
+      }
+
+      const start = new Date(req.query.startDate);
+      const end = new Date(endDate);
+      if (end < start) {
+        throw new Error('endDate must be greater than or equal to startDate');
+      }
+      return true;
+    }),
+  query('maxAmount')
+    .optional()
+    .custom((maxAmount, { req }) => {
+      if (!req.query.minAmount || !maxAmount) {
+        return true;
+      }
+
+      if (Number(maxAmount) < Number(req.query.minAmount)) {
+        throw new Error('maxAmount must be greater than or equal to minAmount');
+      }
+
+      return true;
+    }),
 ];
