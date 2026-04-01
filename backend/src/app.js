@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 
 import { env } from './config/env.js';
 import { notFoundHandler, errorHandler } from './middlewares/errorHandler.js';
+import { requestId } from './middlewares/requestIdMiddleware.js';
 import { apiRouter } from './routes/index.js';
 
 const app = express();
@@ -13,6 +14,7 @@ const app = express();
 app.use(helmet());
 app.use(cors({ origin: env.clientUrl === '*' ? true : env.clientUrl, credentials: true }));
 app.use(morgan(env.nodeEnv === 'production' ? 'combined' : 'dev'));
+app.use(requestId);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
