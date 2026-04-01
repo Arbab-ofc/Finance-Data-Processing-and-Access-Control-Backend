@@ -12,6 +12,7 @@ import {
 import { authenticate } from '../middlewares/authMiddleware.js';
 import { authorize } from '../middlewares/authorizeMiddleware.js';
 import { validateRequest } from '../middlewares/validateRequest.js';
+import { requireAtLeastOneField } from '../middlewares/requireFieldsMiddleware.js';
 import { USER_ROLES } from '../constants/roles.js';
 import { mongoIdParam } from '../validations/commonValidation.js';
 import {
@@ -30,7 +31,13 @@ router.use(authenticate, authorize(USER_ROLES.ADMIN));
 router.post('/', createUserValidation, validateRequest, createUserController);
 router.get('/', listUsersValidation, validateRequest, listUsersController);
 router.get('/:id', mongoIdParam(), validateRequest, getUserController);
-router.patch('/:id', [...mongoIdParam(), ...updateUserValidation], validateRequest, updateUserController);
+router.patch(
+  '/:id',
+  [...mongoIdParam(), ...updateUserValidation],
+  validateRequest,
+  requireAtLeastOneField(['name', 'email']),
+  updateUserController,
+);
 router.patch('/:id/role', [...mongoIdParam(), ...updateRoleValidation], validateRequest, updateRoleController);
 router.patch('/:id/status', [...mongoIdParam(), ...updateStatusValidation], validateRequest, updateStatusController);
 router.patch('/:id/password-reset', [...mongoIdParam(), ...resetPasswordValidation], validateRequest, resetPasswordController);

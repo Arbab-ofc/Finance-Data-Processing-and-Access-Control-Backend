@@ -11,6 +11,7 @@ import { USER_ROLES } from '../constants/roles.js';
 import { authenticate } from '../middlewares/authMiddleware.js';
 import { authorize } from '../middlewares/authorizeMiddleware.js';
 import { validateRequest } from '../middlewares/validateRequest.js';
+import { requireAtLeastOneField } from '../middlewares/requireFieldsMiddleware.js';
 import { mongoIdParam } from '../validations/commonValidation.js';
 import { createRecordValidation, listRecordValidation, updateRecordValidation } from '../validations/recordValidation.js';
 
@@ -21,7 +22,14 @@ router.use(authenticate);
 router.post('/', authorize(USER_ROLES.ADMIN), createRecordValidation, validateRequest, createRecordController);
 router.get('/', listRecordValidation, validateRequest, listRecordsController);
 router.get('/:id', mongoIdParam(), validateRequest, getRecordController);
-router.patch('/:id', authorize(USER_ROLES.ADMIN), [...mongoIdParam(), ...updateRecordValidation], validateRequest, updateRecordController);
+router.patch(
+  '/:id',
+  authorize(USER_ROLES.ADMIN),
+  [...mongoIdParam(), ...updateRecordValidation],
+  validateRequest,
+  requireAtLeastOneField(['amount', 'type', 'category', 'date', 'description']),
+  updateRecordController,
+);
 router.delete('/:id', authorize(USER_ROLES.ADMIN), mongoIdParam(), validateRequest, deleteRecordController);
 
 export const recordRouter = router;
