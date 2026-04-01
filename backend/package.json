@@ -7,8 +7,8 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles",
-    "test:watch": "NODE_ENV=test jest --watch",
+    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --runInBand --detectOpenHandles",
+    "test:watch": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "seed": "node src/seeds/seedData.js"
   },
   "keywords": [
