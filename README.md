@@ -139,34 +139,41 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    API["/api/v1"]
+    A["/api/v1/auth"]
+    A --> A1["POST /login"]
+    A --> A2["GET /me"]
+    A --> A3["POST /logout"]
+```
 
-    API --> AUTH["auth"]
-    AUTH --> A1["POST /login"]
-    AUTH --> A2["GET /me"]
-    AUTH --> A3["POST /logout"]
+```mermaid
+flowchart TD
+    U["/api/v1/users (Admin only)"]
+    U --> U1["POST /"]
+    U --> U2["GET /"]
+    U --> U3["GET /:id"]
+    U --> U4["PATCH /:id"]
+    U --> U5["PATCH /:id/role"]
+    U --> U6["PATCH /:id/status"]
+    U --> U7["PATCH /:id/password-reset"]
+```
 
-    API --> USERS["users (Admin only)"]
-    USERS --> U1["POST /"]
-    USERS --> U2["GET /"]
-    USERS --> U3["GET /:id"]
-    USERS --> U4["PATCH /:id"]
-    USERS --> U5["PATCH /:id/role"]
-    USERS --> U6["PATCH /:id/status"]
-    USERS --> U7["PATCH /:id/password-reset"]
+```mermaid
+flowchart TD
+    R["/api/v1/records"]
+    R --> R1["POST / (Admin)"]
+    R --> R2["GET / (Authenticated)"]
+    R --> R3["GET /:id (Authenticated)"]
+    R --> R4["PATCH /:id (Admin)"]
+    R --> R5["DELETE /:id (Admin)"]
+```
 
-    API --> RECORDS["records"]
-    RECORDS --> R1["POST / (Admin)"]
-    RECORDS --> R2["GET / (Authenticated)"]
-    RECORDS --> R3["GET /:id (Authenticated)"]
-    RECORDS --> R4["PATCH /:id (Admin)"]
-    RECORDS --> R5["DELETE /:id (Admin)"]
-
-    API --> DASH["dashboard (Authenticated)"]
-    DASH --> D1["GET /summary"]
-    DASH --> D2["GET /category-breakdown"]
-    DASH --> D3["GET /trends"]
-    DASH --> D4["GET /recent-activity"]
+```mermaid
+flowchart TD
+    D["/api/v1/dashboard (Authenticated)"]
+    D --> D1["GET /summary"]
+    D --> D2["GET /category-breakdown"]
+    D --> D3["GET /trends"]
+    D --> D4["GET /recent-activity"]
 ```
 
 ---
