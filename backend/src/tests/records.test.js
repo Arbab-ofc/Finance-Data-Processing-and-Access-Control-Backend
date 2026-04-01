@@ -192,4 +192,24 @@ describe('Record Endpoints', () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  test('date range query rejects endDate before startDate', async () => {
+    const { admin } = await createUsersByRole();
+
+    const response = await request(app)
+      .get('/api/v1/records?startDate=2025-02-01&endDate=2025-01-01')
+      .set(authHeader(admin));
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  test('amount range query rejects maxAmount lower than minAmount', async () => {
+    const { admin } = await createUsersByRole();
+
+    const response = await request(app)
+      .get('/api/v1/records?minAmount=500&maxAmount=100')
+      .set(authHeader(admin));
+
+    expect(response.statusCode).toBe(400);
+  });
 });
