@@ -189,4 +189,16 @@ describe('User Management Endpoints', () => {
 
     expect(response.statusCode).toBe(401);
   });
+
+  test('admin cannot deactivate self', async () => {
+    const { admin } = await createUsersByRole();
+
+    const response = await request(app)
+      .patch(`/api/v1/users/${admin._id}/status`)
+      .set(authHeader(admin))
+      .send({ status: 'inactive' });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toBe('Admin cannot deactivate own account');
+  });
 });
