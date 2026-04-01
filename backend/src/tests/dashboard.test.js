@@ -50,6 +50,20 @@ describe('Dashboard Endpoints', () => {
     expect(response.body.data[0]).toHaveProperty('month');
   });
 
+  test('trends supports date-range filters', async () => {
+    const { admin, viewer } = await createUsersByRole();
+
+    await createRecordFixture({ createdBy: admin._id, type: 'income', category: 'Salary', amount: 5000, date: new Date('2025-01-04') });
+    await createRecordFixture({ createdBy: admin._id, type: 'income', category: 'Salary', amount: 6000, date: new Date('2025-03-04') });
+
+    const response = await request(app)
+      .get('/api/v1/dashboard/trends?startDate=2025-02-01&endDate=2025-03-31')
+      .set(authHeader(viewer));
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.data.every((item) => item.month >= 2)).toBe(true);
+  });
+
   test('authenticated user can get recent activity', async () => {
     const { admin, analyst } = await createUsersByRole();
 
@@ -75,6 +89,16 @@ describe('Dashboard Endpoints', () => {
 
     const response = await request(app)
       .get('/api/v1/dashboard/recent-activity?limit=0')
+      .set(authHeader(viewer));
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  test('trends validation rejects inverted date range', async () => {
+    const { viewer } = await createUsersByRole();
+
+    const response = await request(app)
+      .get('/api/v1/dashboard/trends?startDate=2025-05-01&endDate=2025-01-01')
       .set(authHeader(viewer));
 
     expect(response.statusCode).toBe(400);
