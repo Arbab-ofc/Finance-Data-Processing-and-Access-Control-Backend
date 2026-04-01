@@ -20,7 +20,6 @@ Integration-level API reliability verification
 - [How To Run](#how-to-run)
 - [Environment Notes](#environment-notes)
 - [Expected Outcome](#expected-outcome)
-- [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -105,36 +104,3 @@ Example (latest verification in this repo):
 - `Tests: 59 passed, 59 total`
 
 ---
-
-## Troubleshooting
-
-### `listen EPERM: operation not permitted 0.0.0.0`
-
-Cause:
-
-- environment/sandbox disallows local socket binding needed by `mongodb-memory-server`
-
-Fix:
-
-- run the test command outside sandbox restrictions
-
-### `Cannot find module 'mongodb-memory-server'`
-
-Cause:
-
-- dependency not installed
-
-Fix:
-
-```bash
-cd backend
-npm install
-```
-
-### Tests pass locally but fail in CI
-
-Checklist:
-
-- ensure CI uses Node version compatible with current dependencies
-- ensure `NODE_ENV=test`
-- run `npm ci` (or clean install) before `npm run test:ci`
