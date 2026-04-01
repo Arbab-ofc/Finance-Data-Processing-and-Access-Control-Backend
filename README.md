@@ -14,6 +14,8 @@
 ![Jest](https://img.shields.io/badge/Tests-Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
 ![Supertest](https://img.shields.io/badge/API%20Tests-Supertest-14B8A6?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-ISC-2563EB?style=for-the-badge)
+![Deploy](https://img.shields.io/badge/Deploy-Render-46E3B7?style=for-the-badge&logo=render&logoColor=000000)
+![Live API](https://img.shields.io/badge/Live%20API-online-22c55e?style=for-the-badge)
 
 <br/>
 
@@ -23,6 +25,14 @@
 [![Tests](https://img.shields.io/badge/Quality-Endpoint%20Tests-C026D3?style=flat-square)](#test-commands)
 
 </div>
+
+---
+
+## Live API
+
+- Base URL: `https://finance-backend-api-3au8.onrender.com`
+- Health: `https://finance-backend-api-3au8.onrender.com/health`
+- API Root: `https://finance-backend-api-3au8.onrender.com/api/v1`
 
 ---
 
