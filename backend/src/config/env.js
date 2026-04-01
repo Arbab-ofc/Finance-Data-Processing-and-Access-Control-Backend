@@ -18,4 +18,6 @@ export const env = {
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '1d',
   clientUrl: process.env.CLIENT_URL || '*',
   authCookieName: process.env.AUTH_COOKIE_NAME || 'token',
+  mongoServerSelectionTimeoutMs: Number(process.env.MONGO_SERVER_SELECTION_TIMEOUT_MS) || 10000,
+  mongoMaxPoolSize: Number(process.env.MONGO_MAX_POOL_SIZE) || 10,
 };
