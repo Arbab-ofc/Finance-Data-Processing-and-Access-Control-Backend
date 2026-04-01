@@ -129,6 +129,18 @@ describe('Record Endpoints', () => {
     expect(response.body.data.amount).toBe(2222);
   });
 
+  test('admin update record rejects empty payload', async () => {
+    const { admin } = await createUsersByRole();
+    const record = await createRecordFixture({ createdBy: admin._id, updatedBy: admin._id });
+
+    const response = await request(app)
+      .patch(`/api/v1/records/${record._id}`)
+      .set(authHeader(admin))
+      .send({});
+
+    expect(response.statusCode).toBe(400);
+  });
+
   test('non-admin cannot update record', async () => {
     const { admin, viewer } = await createUsersByRole();
     const record = await createRecordFixture({ createdBy: admin._id, updatedBy: admin._id });

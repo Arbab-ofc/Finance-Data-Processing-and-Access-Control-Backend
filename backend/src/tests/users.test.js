@@ -97,6 +97,17 @@ describe('User Management Endpoints', () => {
     expect(response.body.data.name).toBe('Viewer Updated');
   });
 
+  test('admin update user rejects empty payload', async () => {
+    const { admin, viewer } = await createUsersByRole();
+
+    const response = await request(app)
+      .patch(`/api/v1/users/${viewer._id}`)
+      .set(authHeader(admin))
+      .send({});
+
+    expect(response.statusCode).toBe(400);
+  });
+
   test('admin can change role', async () => {
     const { admin, viewer } = await createUsersByRole();
 
