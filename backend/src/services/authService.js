@@ -4,6 +4,7 @@ import { generateToken } from '../utils/jwt.js';
 import { ApiError } from '../utils/apiError.js';
 import { USER_STATUS } from '../constants/status.js';
 import { AUTH_MESSAGES } from '../constants/messages.js';
+import { serializeUser } from '../utils/serializers.js';
 
 export const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
@@ -26,7 +27,7 @@ export const loginUser = async ({ email, password }) => {
 
   return {
     token,
-    user: user.toSafeObject(),
+    user: serializeUser(user),
   };
 };
 
@@ -37,5 +38,5 @@ export const getCurrentUser = async (userId) => {
     throw new ApiError(404, 'User not found');
   }
 
-  return user.toSafeObject();
+  return serializeUser(user);
 };

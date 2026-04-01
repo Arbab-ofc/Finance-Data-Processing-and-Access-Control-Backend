@@ -3,6 +3,7 @@ import { ApiError } from '../utils/apiError.js';
 import { hashPassword } from '../utils/password.js';
 import { buildPagination } from '../utils/pagination.js';
 import { normalizePaginationQuery } from '../utils/query.js';
+import { serializeUser } from '../utils/serializers.js';
 
 export const createUser = async (payload) => {
   const existing = await User.findOne({ email: payload.email.toLowerCase() });
@@ -16,7 +17,7 @@ export const createUser = async (payload) => {
     email: payload.email.toLowerCase(),
   });
 
-  return user.toSafeObject();
+  return serializeUser(user);
 };
 
 export const listUsers = async (query) => {
@@ -41,7 +42,7 @@ export const listUsers = async (query) => {
   ]);
 
   return {
-    data: users.map((user) => user.toSafeObject()),
+    data: users.map((user) => serializeUser(user)),
     meta: buildPagination({ page, limit, total }),
   };
 };
@@ -53,7 +54,7 @@ export const getUserById = async (userId) => {
     throw new ApiError(404, 'User not found');
   }
 
-  return user.toSafeObject();
+  return serializeUser(user);
 };
 
 export const updateUser = async (userId, payload) => {
@@ -73,7 +74,7 @@ export const updateUser = async (userId, payload) => {
     throw new ApiError(404, 'User not found');
   }
 
-  return user.toSafeObject();
+  return serializeUser(user);
 };
 
 export const updateUserRole = async (userId, role) => {
@@ -83,7 +84,7 @@ export const updateUserRole = async (userId, role) => {
     throw new ApiError(404, 'User not found');
   }
 
-  return user.toSafeObject();
+  return serializeUser(user);
 };
 
 export const updateUserStatus = async (userId, status, actorId) => {
@@ -97,7 +98,7 @@ export const updateUserStatus = async (userId, status, actorId) => {
     throw new ApiError(404, 'User not found');
   }
 
-  return user.toSafeObject();
+  return serializeUser(user);
 };
 
 export const resetUserPassword = async (userId, password) => {
