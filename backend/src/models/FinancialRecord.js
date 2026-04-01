@@ -46,4 +46,8 @@ const financialRecordSchema = new mongoose.Schema(
   },
 );
 
+financialRecordSchema.index({ date: -1 });
+financialRecordSchema.index({ type: 1, category: 1 });
+financialRecordSchema.index({ createdBy: 1, createdAt: -1 });
+
 export const FinancialRecord = mongoose.model('FinancialRecord', financialRecordSchema);
