@@ -3,6 +3,7 @@ export const sendSuccess = (res, message, data = null, statusCode = 200, meta = 
     success: true,
     message,
     data,
+    requestId: res.locals?.requestId,
   };
 
   if (meta) {
@@ -16,6 +17,7 @@ export const sendError = (res, statusCode, message, errors = undefined) => {
   const response = {
     success: false,
     message,
+    requestId: res.locals?.requestId,
   };
 
   if (errors) {

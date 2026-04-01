@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ success: true, message: 'Server is healthy' });
+  res.status(200).json({ success: true, message: 'Server is healthy', requestId: req.requestId });
 });
 
 app.use('/api/v1', apiRateLimiter, apiRouter);

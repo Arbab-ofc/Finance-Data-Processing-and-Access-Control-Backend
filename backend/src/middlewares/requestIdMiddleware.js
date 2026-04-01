@@ -5,6 +5,7 @@ export const requestId = (req, res, next) => {
   const id = typeof incoming === 'string' && incoming.trim() ? incoming.trim() : crypto.randomUUID();
 
   req.requestId = id;
+  res.locals.requestId = id;
   res.setHeader('x-request-id', id);
 
   return next();

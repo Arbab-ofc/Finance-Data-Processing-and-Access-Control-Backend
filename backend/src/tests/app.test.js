@@ -38,6 +38,7 @@ describe('App Baseline Endpoints', () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.headers['x-request-id']).toBeDefined();
+    expect(response.body.requestId).toBeDefined();
   });
 
   test('request id is propagated when provided', async () => {
