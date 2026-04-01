@@ -70,6 +70,7 @@ describe('User Management Endpoints', () => {
     expect(response.body.success).toBe(true);
     expect(response.body.data.length).toBe(2);
     expect(response.body.meta.total).toBe(4);
+    expect(response.body.data.every((user) => user.password === undefined)).toBe(true);
   });
 
   test('admin can get single user', async () => {
@@ -81,6 +82,7 @@ describe('User Management Endpoints', () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body.data.email).toBe(analyst.email);
+    expect(response.body.data.password).toBeUndefined();
   });
 
   test('admin can update user', async () => {
