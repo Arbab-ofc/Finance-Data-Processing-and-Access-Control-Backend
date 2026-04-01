@@ -170,6 +170,18 @@ describe('User Management Endpoints', () => {
     expect(response.statusCode).toBe(400);
   });
 
+  test('users list uses default pagination when omitted', async () => {
+    const { admin } = await createUsersByRole();
+
+    const response = await request(app)
+      .get('/api/v1/users')
+      .set(authHeader(admin));
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.meta.page).toBe(1);
+    expect(response.body.meta.limit).toBe(10);
+  });
+
   test('cannot update user to duplicate email', async () => {
     const { admin, analyst, viewer } = await createUsersByRole();
     expect(analyst.email).not.toBe(viewer.email);

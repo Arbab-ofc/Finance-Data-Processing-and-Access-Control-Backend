@@ -91,6 +91,19 @@ describe('Record Endpoints', () => {
     expect(response.body.meta.total).toBe(4);
   });
 
+  test('records list uses default pagination when omitted', async () => {
+    const { admin } = await createUsersByRole();
+
+    await createRecordFixture({ createdBy: admin._id, amount: 500 });
+    const response = await request(app)
+      .get('/api/v1/records')
+      .set(authHeader(admin));
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.meta.page).toBe(1);
+    expect(response.body.meta.limit).toBe(10);
+  });
+
   test('single record fetch works', async () => {
     const { admin, analyst } = await createUsersByRole();
     const record = await createRecordFixture({ createdBy: admin._id, updatedBy: admin._id });
