@@ -3,6 +3,7 @@ import { verifyToken } from '../utils/jwt.js';
 import { ApiError } from '../utils/apiError.js';
 import { USER_STATUS } from '../constants/status.js';
 import { env } from '../config/env.js';
+import { AUTH_MESSAGES } from '../constants/messages.js';
 
 const extractToken = (req) => {
   if (req.headers.authorization?.startsWith('Bearer ')) {
@@ -20,7 +21,7 @@ export const authenticate = async (req, res, next) => {
   const token = extractToken(req);
 
   if (!token) {
-    return next(new ApiError(401, 'Authentication token is required'));
+    return next(new ApiError(401, AUTH_MESSAGES.TOKEN_REQUIRED));
   }
 
   try {
@@ -28,11 +29,11 @@ export const authenticate = async (req, res, next) => {
     const user = await User.findById(decoded.sub).select('+password');
 
     if (!user) {
-      return next(new ApiError(401, 'Invalid authentication token'));
+      return next(new ApiError(401, AUTH_MESSAGES.INVALID_TOKEN));
     }
 
     if (user.status !== USER_STATUS.ACTIVE) {
-      return next(new ApiError(403, 'Your account is inactive'));
+      return next(new ApiError(403, AUTH_MESSAGES.INACTIVE_ACCOUNT));
     }
 
     req.user = {
@@ -45,6 +46,6 @@ export const authenticate = async (req, res, next) => {
 
     return next();
   } catch (error) {
-    return next(new ApiError(401, 'Invalid authentication token'));
+    return next(new ApiError(401, AUTH_MESSAGES.INVALID_TOKEN));
   }
 };
